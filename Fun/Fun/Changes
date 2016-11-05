@@ -1,0 +1,6 @@
+Revision history for Perl extension Fun.
+
+0.01  Fri Nov  4 20:57:27 2016
+	- original version; created by h2xs 1.23 with options
+		-AX -b 5.8.0 -n Fun2
+
