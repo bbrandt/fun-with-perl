@@ -1,5 +1,5 @@
 # Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl Fun.t'
+# `make test'. After `make install' it should work as `perl Iterate.t'
 
 #########################
 
@@ -8,8 +8,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
-BEGIN { use_ok('Fun') };
+use Test::More tests => 3;
+BEGIN { use_ok('Iterate') };
 
 #########################
 

@@ -3,4 +3,6 @@ Makefile.PL
 MANIFEST
 README
 t/Folders/Iterate.t
+t/Folders/RemoveWorldWritable.t
 lib/Folders/Iterate.pm
+lib/Folders/RemoveWorldWritable.pm

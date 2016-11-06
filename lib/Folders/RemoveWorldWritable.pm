@@ -1,8 +1,8 @@
-package Files::Iterate;
+package Files::RemoveWorldWritable;
 
 use strict;
 use warnings;
-use File::Find;
+use Files::Iterate;
 
 our $VERSION = '1.00';
 use base 'Exporter';
@@ -35,25 +35,15 @@ The following functions are exported by default
 
 # define the function iterate().
 
-sub iterate {
-	my $file_selector = shift;
-	my $file_operation = shift;
+sub remove_world_writable {
+	my $start_dir = shift;
 	  
-	my @files;
-	my $start_dir = ".";  # top level dir to search
-	find( 
-		sub { 
-			unless -d $File::Find::name  {
-				if $file_selector($File::Find::name) {
-					push @files, $File::Find::name; 
-				}
-			}
-		}, 
+	iterate 
+		#sub { (stat $_[0])[2] & S_IWOTH },
+		sub { return 1; },
+		#sub { chmod o-w $_[0] }
+		sub { print $_[0]; },
 		$start_dir
-	);
-
-	for my $file (@files) {
-		$file_operation($file); 
 }
 
 =head1 AUTHOR
