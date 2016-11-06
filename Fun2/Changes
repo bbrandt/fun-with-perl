@@ -1,6 +1,0 @@
-Revision history for Perl extension Fun2.
-
-0.01  Fri Nov  4 21:07:26 2016
-	- original version; created by h2xs 1.23 with options
-		-AX -b 5.8.0 -n Fun2
-
