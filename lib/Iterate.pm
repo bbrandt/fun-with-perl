@@ -1,4 +1,4 @@
-package Files::Iterate;
+package Iterate;
 
 use strict;
 use warnings;
@@ -11,11 +11,11 @@ our @EXPORT = qw(iterate);
 
 =head1 NAME
 
-Files::Iterate - Recursively iterate and processfiles 
+Iterate - Recursively iterate and process a selective set of files 
 
 =head1 SYNOPSIS
 
-	use Files::Iterate;
+	use Iterate;
 	print iterate(file_selector, remove_global_writable);
 
 =head1 DESCRIPTION
@@ -33,15 +33,12 @@ The following functions are exported by default
 
 =cut
 
-# define the function iterate().
-
-sub remove_world_writable {
+sub iterate {
 	my $file_selector = shift;
 	my $file_operation = shift;
 	my $start_dir = shift;
 	  
 	my @files;
-	my $start_dir = ".";  # top level dir to search
 	find( 
 		sub { 
 			unless (-d $File::Find::name)  {
