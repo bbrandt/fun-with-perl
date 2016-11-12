@@ -7,7 +7,6 @@
 
 use strict;
 use warnings;
-use TestSetup;
 
 use File::Spec;
 use Test::More tests => 2;
