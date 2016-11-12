@@ -10,7 +10,7 @@ use warnings;
 use TestSetup;
 
 use File::Spec;
-use Test::More tests => 3;
+use Test::More tests => 2;
 BEGIN { use_ok('Iterate') };
 
 #########################

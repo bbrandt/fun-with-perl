@@ -8,9 +8,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 1;
 BEGIN { use_ok('RemoveWorldWritable') };
 
 #########################
 
-ok( defined($btaste) && ref $btaste eq 'Film',     'new() works' );
