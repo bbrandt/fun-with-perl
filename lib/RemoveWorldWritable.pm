@@ -3,6 +3,7 @@ package RemoveWorldWritable;
 use strict;
 use warnings;
 use Iterate;
+use File::Find;
 use Fcntl ':mode';
 
 our $VERSION = '1.00';
@@ -34,21 +35,54 @@ The following functions are exported by default
 =cut
 
 sub is_world_writable {
-	return (stat $_[0])[2] & S_IWOTH;
+	my $filePath = shift;
+
+	return (stat $filePath)[2] & S_IWOTH;
 }
 
 sub remove_world_writable {
 	my $filePath = shift;
-	chmod "o-w", $filePath;
+
+	my	$perm = (stat $filePath)[2];	
+	
+	chmod $perm & (~S_IWOTH & 0777), $filePath;
 }
 
-sub recursive_remove_world_writable {
+sub recursive_remove_world_writable_overly_complex {
 	my $start_dir = shift;
 	  
 	iterate 
 		\&is_world_writable,
 		\&remove_world_writable,
 		$start_dir
+}
+
+sub recursive_remove_world_writable {
+	my $start_dir = shift;
+	  
+	my @files;
+	print "\nStarting in directory: $start_dir\n"; 
+	find( 
+		sub { 
+			print "Testing file: $File::Find::name \n";			
+			unless (-d $File::Find::name)  {
+				if (is_world_writable($File::Find::name)) {
+					print "Adding file: $File::Find::name \n";				
+					push @files, $File::Find::name; 
+				}
+				else {
+					print "Excluding file: $File::Find::name \n"; 					
+				}
+			}
+			else {
+				print "Excluding directory: $File::Find::name \n"; 					
+			}
+		}, 
+		$start_dir);
+
+	for my $file (@files) {
+		remove_world_writable($file); 
+	}
 }
 
 =head1 AUTHOR

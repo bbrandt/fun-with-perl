@@ -68,6 +68,6 @@ recursive_remove_world_writable
 ok(!is_world_writable($file3));
 ok(!is_world_writable($file2));
 
-remove_tree $testDir;
+#remove_tree $testDir;
 
 1;
