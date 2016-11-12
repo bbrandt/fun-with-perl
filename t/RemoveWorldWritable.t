@@ -10,7 +10,7 @@ use warnings;
 
 use File::Spec;
 use File::Path qw(remove_tree);
-use Test::More tests => 4;
+use Test::More tests => 5;
 BEGIN { use_ok('RemoveWorldWritable') };
 
 #########################
@@ -49,8 +49,8 @@ create_empty_file($file2);
 create_empty_file($file3);
 create_empty_file($file4);
 
-chmod 777, $file3;
-chmod 777, $file2;
+chmod 0777, $file3;
+chmod 0777, $file2;
 
 ok(is_world_writable($file3), "file3 world writable");
 ok(is_world_writable($file2), "file2 world writable");
@@ -69,3 +69,5 @@ ok(!is_world_writable($file3));
 ok(!is_world_writable($file2));
 
 remove_tree $testDir;
+
+1;
