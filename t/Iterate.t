@@ -55,7 +55,7 @@ my @actual;
 iterate 
 	sub { /3$/ },
 	sub { push @actual, $_ },
-	$testDir
+	$testDir;
 
 # Assert
 is_deeply( [sort @actual, [sort @expected] );
