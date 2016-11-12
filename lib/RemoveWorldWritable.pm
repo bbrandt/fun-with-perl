@@ -34,8 +34,7 @@ The following functions are exported by default
 =cut
 
 sub is_world_writable {
-	my $filePath = shift;
-	return (stat $filePath)[2] & S_IWOTH;
+	return (stat $_[0])[2] & S_IWOTH;
 }
 
 sub remove_world_writable {
@@ -47,8 +46,8 @@ sub recursive_remove_world_writable {
 	my $start_dir = shift;
 	  
 	iterate 
-		is_world_writable,
-		remove_world_writable,
+		\&is_world_writable,
+		\&remove_world_writable,
 		$start_dir
 }
 

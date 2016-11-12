@@ -39,16 +39,24 @@ sub iterate {
 	my $start_dir = shift;
 	  
 	my @files;
+	print "\nStarting in directory: $start_dir\n"; 
 	find( 
 		sub { 
+			print "Testing file: $File::Find::name \n";			
 			unless (-d $File::Find::name)  {
 				if ($file_selector->($File::Find::name)) {
+					print "Adding file: $File::Find::name \n";				
 					push @files, $File::Find::name; 
 				}
+				else {
+					print "Excluding file: $File::Find::name \n"; 					
+				}
+			}
+			else {
+				print "Excluding directory: $File::Find::name \n"; 					
 			}
 		}, 
-		$start_dir
-	);
+		$start_dir);
 
 	for my $file (@files) {
 		$file_operation->($file); 

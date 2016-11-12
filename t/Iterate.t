@@ -9,22 +9,25 @@ use strict;
 use warnings;
 
 use File::Spec;
+use File::Path qw(remove_tree);
 use Test::More tests => 2;
 BEGIN { use_ok('Iterate') };
 
 #########################
 
 # Arrange
-my $dir = getcwd;
-$testDir = File::Spec->catfile($dir, 't-iterate');
-$aDir = File::Spec->catfile($testDir, 'a');
-$bDir = File::Spec->catfile($testDir, 'b');
-$cDir = File::Spec->catfile($bDir, 'c');
+my $dir = Cwd::getcwd;
+my $testDir = File::Spec->catfile($dir, 't-iterate');
+my $aDir = File::Spec->catfile($testDir, 'a');
+my $bDir = File::Spec->catfile($testDir, 'b');
+my $cDir = File::Spec->catfile($bDir, 'c');
 
-$file1 = File::Spec->catfile($aDir, 'f1');
-$file2 = File::Spec->catfile($bDir, 'f2');
-$file3 = File::Spec->catfile($cDir, 'f3');
-$file4 = File::Spec->catfile($cDir, 'f4');
+my $file1 = File::Spec->catfile($aDir, 'f1');
+my $file2 = File::Spec->catfile($bDir, 'f2');
+my $file3 = File::Spec->catfile($cDir, 'f3');
+my $file4 = File::Spec->catfile($cDir, 'f4');
+
+remove_tree $testDir;
 
 mkdir $testDir;
 mkdir $aDir;
@@ -53,9 +56,11 @@ $expected[2] = $file4;
 # Act
 my @actual;
 iterate 
-	sub { /3$/ },
-	sub { push @actual, $_ },
+	sub { /[0124]$/; },
+	sub { push @actual, $_[0]; },
 	$testDir;
 
 # Assert
-is_deeply( [sort @actual, [sort @expected] );
+is_deeply( [sort @actual], [sort @expected] );
+
+remove_tree $testDir;

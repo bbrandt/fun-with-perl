@@ -8,8 +8,64 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use File::Spec;
+use File::Path qw(remove_tree);
+use Test::More tests => 4;
 BEGIN { use_ok('RemoveWorldWritable') };
 
 #########################
 
+# Arrange
+my $dir = Cwd::getcwd;
+my $testDir = File::Spec->catfile($dir, 't-permission');
+my $aDir = File::Spec->catfile($testDir, 'a');
+my $bDir = File::Spec->catfile($testDir, 'b');
+my $cDir = File::Spec->catfile($bDir, 'c');
+
+my $file1 = File::Spec->catfile($aDir, 'f1');
+my $file2 = File::Spec->catfile($bDir, 'f2');
+my $file3 = File::Spec->catfile($cDir, 'f3');
+my $file4 = File::Spec->catfile($cDir, 'f4');
+
+remove_tree $testDir;
+
+mkdir $testDir;
+mkdir $aDir;
+mkdir $bDir;
+mkdir $cDir;
+
+
+sub create_empty_file {
+	eval {
+		open my $fh, '>', $_[0]
+		or die "Cannot create $_[0]: $!\n";
+		close $fh or die "Cannot close $_[0]: $!\n";
+	};
+	return $@;
+}
+
+create_empty_file($file1);
+create_empty_file($file2);
+create_empty_file($file3);
+create_empty_file($file4);
+
+chmod 777, $file3;
+chmod 777, $file2;
+
+ok(is_world_writable($file3), "file3 world writable");
+ok(is_world_writable($file2), "file2 world writable");
+
+my @expected;
+$expected[0] = $file1;
+$expected[1] = $file2;
+$expected[2] = $file4;
+
+# Act
+recursive_remove_world_writable 
+	$testDir;
+
+# Assert
+ok(!is_world_writable($file3));
+ok(!is_world_writable($file2));
+
+remove_tree $testDir;
