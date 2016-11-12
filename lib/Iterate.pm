@@ -42,7 +42,7 @@ sub iterate {
 	find( 
 		sub { 
 			unless (-d $File::Find::name)  {
-				if ($file_selector($File::Find::name)) {
+				if ($file_selector->($File::Find::name)) {
 					push @files, $File::Find::name; 
 				}
 			}
@@ -51,7 +51,8 @@ sub iterate {
 	);
 
 	for my $file (@files) {
-		$file_operation($file); 
+		$file_operation->($file); 
+	}
 }
 
 =head1 AUTHOR
