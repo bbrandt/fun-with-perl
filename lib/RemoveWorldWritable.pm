@@ -3,11 +3,12 @@ package RemoveWorldWritable;
 use strict;
 use warnings;
 use Iterate;
+use Fcntl ':mode';
 
 our $VERSION = '1.00';
 use base 'Exporter';
 
-our @EXPORT = qw(recursive_remove_world_writable);
+our @EXPORT = qw(is_world_writable remove_world_writable recursive_remove_world_writable);
 
 =head1 NAME
 
@@ -32,18 +33,22 @@ The following functions are exported by default
 
 =cut
 
+sub is_world_writable {
+	my $filePath = shift;
+	return (stat $filePath)[2] & S_IWOTH;
+}
+
 sub remove_world_writable {
-	(stat $_[0])[2] & S_IWOTH	
+	my $filePath = shift;
+	chmod "o-w", $filePath;
 }
 
 sub recursive_remove_world_writable {
 	my $start_dir = shift;
 	  
 	iterate 
-		#sub { (stat $_[0])[2] & S_IWOTH },
-		sub { return 1; },
-		#sub { chmod o-w $_[0] }
-		sub { print $_[0]; },
+		is_world_writable,
+		remove_world_writable,
 		$start_dir
 }
 
