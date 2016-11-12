@@ -44,8 +44,9 @@ sub remove_world_writable {
 	my $filePath = shift;
 
 	my	$perm = (stat $filePath)[2];	
+	my $desiredPerm = $perm & ~S_IWOTH; 
 	
-	chmod $perm & (~S_IWOTH & 0777), $filePath;
+	chmod $desiredPerm, $filePath;
 }
 
 sub recursive_remove_world_writable_overly_complex {
